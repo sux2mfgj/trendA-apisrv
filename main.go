@@ -3,12 +3,34 @@ package main
 // OAuth2
 import (
 	"fmt"
-	"github.com/dghubble/go-twitter/twitter"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
 	"log"
 	"os"
 )
+
+var japan_woeids = map[string]int64{
+	"Kitakyushu": 1110809,
+	"Saitama":    1116753,
+	"Chiba":      1117034,
+	"Fukuoka":    1117099,
+	"Hamamatsu":  1117155,
+	"Hiroshima":  1117227,
+	"Kawasaki":   1117502,
+	"Kobe":       1117545,
+	"Kumamoto":   1117605,
+	"Nagoya":     1117817,
+	"Niigata":    1117881,
+	"Sagamihara": 1118072,
+	"Sapporo":    1118108,
+	"Sendai":     1118129,
+	"Takamatsu":  1118285,
+	"Tokyo":      1118370,
+	"Yokohama":   1118550,
+	"Okinawa":    2345896,
+	"Osaka":      15015370,
+	"Kyoto":      15015372,
+	"Okayama":    90036018,
+	"Japan":      23424856,
+}
 
 func main() {
 
@@ -17,26 +39,20 @@ func main() {
 
 	if len(clientID) == 0 || len(clientSecret) == 0 {
 		log.Fatal("Should be set environment variables named `TRENDYA_TWITTER_CLIENT_ID` and `TRENDYA_TWITTER_CLIENT_SECRET`.")
+		return
 	}
 
-	config := &clientcredentials.Config{
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
-		TokenURL:     "https://api.twitter.com/oauth2/token",
-	}
-	httpClient := config.Client(oauth2.NoContext)
+	loader := NewLoader(clientID, clientSecret)
 
-	client := twitter.NewClient(httpClient)
+	for text, id := range japan_woeids {
+		fmt.Printf("%v %v\n", text, id)
+		trendList, err := loader.LoadTrends(id)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	trend, _, err := client.Trends.Place(23424856, &twitter.TrendsPlaceParams{})
-	if err != nil {
-		fmt.Println("err {}", err)
-	}
-
-	for _, tweet := range trend {
-		for _, t := range tweet.Trends {
-			Save(&t)
-			fmt.Println(t.Name)
+		for _, trend := range trendList[0].Trends {
+			fmt.Println(trend.Name)
 		}
 	}
 }
