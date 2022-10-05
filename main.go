@@ -1,6 +1,5 @@
 package main
 
-// OAuth2
 import (
 	"fmt"
 	"log"
@@ -42,17 +41,26 @@ func main() {
 		return
 	}
 
+	datapath := os.Getenv("TRENDYA_DATAPATH")
+	if len(datapath) == 0 {
+		datapath = "./data"
+	}
+
 	loader := NewLoader(clientID, clientSecret)
 
-	for text, id := range japan_woeids {
-		fmt.Printf("%v %v\n", text, id)
+	for place, id := range japan_woeids {
 		trendList, err := loader.LoadTrends(id)
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		var file string
 		for _, trend := range trendList[0].Trends {
-			fmt.Println(trend.Name)
+			file, err = StoreTrend(&trend, datapath, place)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
+		fmt.Println("Save trends: ", file)
 	}
 }

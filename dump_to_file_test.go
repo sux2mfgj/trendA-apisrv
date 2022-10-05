@@ -11,8 +11,11 @@ func TestSaveToFile(t *testing.T) {
 		URL:             "http://twitter.com/search?q=%23%E5%A4%A9%E7%9A%87%E6%9D%AF",
 		PromotedContent: "",
 		Query:           "%23%E5%A4%A9%E7%9A%87%E6%9D%AF",
-		TweetVolume:     14438,
+		TweetVolume:     23424856,
 	}
 
-	Save(&trend)
+	file, err = StoreTrend(&trend, "Japan", "./data")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
