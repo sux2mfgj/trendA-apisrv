@@ -1,4 +1,4 @@
-module github.com/sux2mfgj/trendy-a
+module github.com/sux2mfgj/trendy-a/recoder
 
 go 1.19
 
