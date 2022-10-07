@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func StoreTrend(trend *twitter.Trend, dir string, location string) (string, error) {
+func StoreTrends(trendList []twitter.TrendsList, dir string, location string) error {
 	now := time.Now()
 	const layout = "2006_01_02_15.json"
 
@@ -17,7 +17,6 @@ func StoreTrend(trend *twitter.Trend, dir string, location string) (string, erro
 
 	if err := os.MkdirAll(base, os.ModePerm); err != nil {
 		log.Fatal(err)
-		return "", err
 	}
 
 	filepath := path.Join(base, now.Format(layout))
@@ -25,24 +24,20 @@ func StoreTrend(trend *twitter.Trend, dir string, location string) (string, erro
 	file, err := os.OpenFile(filepath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
-		return "", err
 	}
 
-	j, err := json.Marshal(trend)
+	j, err := json.Marshal(trendList)
 	if err != nil {
 		log.Fatal(err)
-		return "", err
 	}
 
 	if _, err := file.Write([]byte(string(j))); err != nil {
 		log.Fatal(err)
-		return "", err
 	}
 
 	if err = file.Close(); err != nil {
 		log.Fatal(err)
-		return "", err
 	}
 
-	return filepath, nil
+	return nil
 }

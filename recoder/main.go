@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 )
@@ -54,13 +53,9 @@ func main() {
 			log.Fatal(err)
 		}
 
-		var file string
-		for _, trend := range trendList[0].Trends {
-			file, err = StoreTrend(&trend, datapath, place)
-			if err != nil {
-				log.Fatal(err)
-			}
+		err = StoreTrends(trendList, datapath, place)
+		if err != nil {
+			log.Fatal(err)
 		}
-		fmt.Println("Save trends: ", file)
 	}
 }
