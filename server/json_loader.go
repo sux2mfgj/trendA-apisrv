@@ -38,10 +38,8 @@ func (j *JsonLoader) validateFilePath(path string) bool {
 func (j *JsonLoader) Load(location string, datetime string) ([]twitter.TrendsList, error) {
 	filepath := path.Join(j.Datapath, location, datetime+".json")
 
-	log.Println(filepath)
-
 	if !j.validateFilePath(filepath) {
-		log.Println("query tried to access invalid path: {}", filepath)
+		log.Println("query tried to access invalid path:", filepath)
 		return nil, fmt.Errorf("Invalid access")
 	}
 
