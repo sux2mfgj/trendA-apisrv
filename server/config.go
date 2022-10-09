@@ -9,7 +9,9 @@ import (
 
 type (
 	Config struct {
-		Port int
+		Port     int
+		Loader   string
+		DataPath string
 	}
 )
 
