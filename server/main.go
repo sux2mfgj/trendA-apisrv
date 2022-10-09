@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"github.com/dghubble/go-twitter/twitter"
+	"github.com/jessevdk/go-flags"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type Loader interface {
@@ -42,9 +44,30 @@ func VersionHandler(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
+var opts struct {
+	Config string `short:"c" description:"config file path"`
+}
+
 func main() {
+	parser := flags.NewParser(&opts, flags.Default)
+
+	_, err := parser.Parse()
+	if err != nil {
+		switch err.(type) {
+		case flags.ErrorType:
+			log.Fatal("a")
+		default:
+			log.Fatal("b")
+		}
+	}
+
+	config, err := LoadConfigFile(opts.Config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	http.HandleFunc("/v0/version", VersionHandler)
 	http.HandleFunc("/v0/trends", GetTrends)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(config.Port), nil))
 }
