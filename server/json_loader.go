@@ -32,7 +32,7 @@ func NewJsonLoader(datapath string) (*JsonLoader, error) {
 }
 
 func (j *JsonLoader) validateFilePath(path string) bool {
-	return !strings.HasPrefix(path, j.Datapath)
+	return strings.HasPrefix(path, j.Datapath)
 }
 
 func (j *JsonLoader) Load(location string, datetime string) ([]twitter.TrendsList, error) {
