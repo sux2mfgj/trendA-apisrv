@@ -14,6 +14,8 @@ type JsonLoader struct {
 	Datapath string
 }
 
+var _ TrendsLoader = (*JsonLoader)(nil)
+
 func NewJsonLoader(datapath string) (*JsonLoader, error) {
 	info, err := os.Stat(datapath)
 	if err != nil {

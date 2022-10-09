@@ -7,6 +7,8 @@ import (
 type DummyLoader struct {
 }
 
+var _ TrendsLoader = (*DummyLoader)(nil)
+
 func (d *DummyLoader) Load(location string, datetime string) ([]twitter.TrendsList, error) {
 	return []twitter.TrendsList{
 		{
