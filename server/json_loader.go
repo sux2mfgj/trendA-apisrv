@@ -21,7 +21,7 @@ func NewJsonLoader(datapath string) (*JsonLoader, error) {
 	}
 
 	if !info.IsDir() {
-		return nil, fmt.Errorf("{} is not a directory", datapath)
+		return nil, fmt.Errorf("%s is not a directory", datapath)
 	}
 
 	return &JsonLoader{
